@@ -3,15 +3,15 @@ from otree.api import (
     Currency as c, currency_range
 )
 import random
-
+from django.core.validators import MaxValueValidator, MinValueValidator
 from django import forms
-
+from django.forms.widgets import NumberInput
 from django.db import models as djmodels
 
 doc = """
-public good game with some variations depending on session configs:
-- punishment stage (for session 4)
-- collective sanctions (for session 7)
+Public Good Game with Punishment (Fehr and Gaechter).
+Fehr, E. and Gachter, S., 2000.
+ Cooperation and punishment in public goods experiments. American Economic Review, 90(4), pp.980-994.
 """
 
 
@@ -75,4 +75,7 @@ class Player(BasePlayer):
 class Punishment(djmodels.Model):
     sender = djmodels.ForeignKey(to=Player, related_name='punishments_sent')
     receiver = djmodels.ForeignKey(to=Player, related_name='punishments_received')
-    amount = models.IntegerField(min=0, max=Constants.punishment_endowment)
+    amount = models.IntegerField(validators=[MaxValueValidator(Constants.punishment_endowment),
+                                             MinValueValidator(0)],
+                                 null=True,
+                                 )

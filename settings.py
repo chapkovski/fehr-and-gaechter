@@ -102,7 +102,7 @@ SESSION_CONFIG_DEFAULTS = {
 SESSION_CONFIGS = [
     {
         'name': 'pggfg',
-        'display_name': 'pggfg',
+        'display_name': 'Public Good Game with Punishment (Fehr and Gaechter)',
         'num_demo_participants': 3,
         'app_sequence': ['pggfg'],
     }

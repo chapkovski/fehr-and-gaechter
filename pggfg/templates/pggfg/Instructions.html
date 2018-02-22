@@ -2,22 +2,36 @@
 
 <div class="instructions well well-lg">
 
-
-    <p>
-        In the beginning of each round every participant in your group of {{ Constants.players_per_group }}
-        receives <strong>{{ Constants.endowment|c }}</strong>. The group
-        has the opportunity to undertake a joint project. Each participant in
-        the group decides how much she or he is going to contribute to
-        the project. Contribution could be any integer from <strong>0
-        to {{ Constants.endowment|c }}</strong>.
-    </p>
-    <p>
-        The earnings from the project are calculated as follows: The
-        contributions of all <strong>{{ Constants.players_per_group }}</strong> participants are
-        added up, the total contribution
-        is multiplied by a factor of <strong>{{ Constants.efficiency_factor }}</strong>, and the
-        resulting amount is the total earnings from the project, which is
-        evenly split among all <strong>{{ Constants.players_per_group }}</strong>
-        participants. Your payoff equals your earnings from the project, plus
-        the amount you did not contribute.
-    </p></div>
+    <p>The game consists of two stages:</p>
+    <ul>
+        <li>
+            <p>
+                In the beginning of the <b>first</b> stage each round every participant in your group
+                of {{ Constants.players_per_group }}
+                receives <strong>{{ Constants.endowment|c }}</strong>. The group
+                has the opportunity to undertake a joint project. Each participant in
+                the group decides how much she or he is going to contribute to
+                the project. Contribution could be any integer from <strong>0
+                to {{ Constants.endowment|c }}</strong>.
+            </p>
+            <p>
+                The earnings from the project are calculated as follows: The
+                contributions of all <strong>{{ Constants.players_per_group }}</strong> participants are
+                added up, the total contribution
+                is multiplied by a factor of <strong>{{ Constants.efficiency_factor }}</strong>, and the
+                resulting amount is the total earnings from the project, which is
+                evenly split among all <strong>{{ Constants.players_per_group }}</strong>
+                participants. Your payoff equals your earnings from the project, plus
+                the amount you did not contribute.
+            </p>
+        </li>
+        <li>
+            In the second stage you can see the decisions and other participants in the your group,
+            You can transfer up to <strong>{{ Constants.punishment_endowment }} points </strong> from your endowment to
+            decrease the
+            income of these
+            participants. By transferring 1 point from your endowment you decrease the income of another
+            participant by {{ Constants.punishment_factor }} points.
+        </li>
+    </ul>
+</div>
