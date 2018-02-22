@@ -1,0 +1,68 @@
+{% extends "global/Page.html" %}
+{% load staticfiles otree_tags %}
+
+{% block title %}
+    Punishment stage (Period {{ subsession.round_number }} of
+    {{ Constants.num_rounds }})
+{% endblock %}
+
+{% block content %}
+    <div class="card">
+        <div class="card-header">
+            <b> Instructions for stage 2</b>
+        </div>
+        <div class="card-body">
+
+            In this stage you can see the decisions and other participants in the your group,
+            You can transfer up to <strong>{{ Constants.punishment_endowment }} points </strong> from your endowment to
+            decrease the
+            income of these
+            participants. By transferring 1 point from your endowment you decrease the income of another
+            participant by 3 points.
+
+        </div>
+    </div>
+
+
+
+    {% if formset.non_form_errors %}
+        {% for error in formset.non_form_errors %}
+            <div class="alert alert-danger">
+                {{ error }}
+            </div>
+        {% endfor %}
+    {% endif %}
+
+    <table class="table table-hover table-striped table-responsive">
+        {{ formset.management_form }}
+        <thead>
+        <tr>
+            <th>Player:</th>
+            <th>Contibution</th>
+            <th>Punishment tokens</th>
+        </tr>
+        </thead>
+
+        {% for form in formset.forms %}
+            <tr>
+                <td>Player {{ forloop.counter }}</td>
+                <td>{{ form.instance.receiver.contribution }}</td>
+                <td>{% formfield form.amount label='' %}</td>
+                {% for hidden in form.hidden_fields %}
+                    {{ hidden }}
+                {% endfor %}
+            </tr>
+        {% endfor %}
+    </table>
+
+    {% next_button %}
+
+
+{% endblock %}
+{% block styles %}
+    <style>
+        .table {
+            display: table !important
+        }
+    </style>
+{% endblock %}

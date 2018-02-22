@@ -1,0 +1,8 @@
+{% extends "global/PageExt.html" %}
+{% load staticfiles otree_tags %}
+{% block title %} Final Results {% endblock %}
+
+{% block inner_content %}
+    {% include 'pggfg/finalresultstable.html' %}
+    {% next_button %}
+{% endblock %}

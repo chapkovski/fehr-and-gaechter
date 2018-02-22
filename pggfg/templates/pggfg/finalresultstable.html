@@ -1,0 +1,60 @@
+{% load staticfiles otree_tags %}
+{% block styles %}
+
+    <style>
+        td#filka {
+            width: 20px;
+            font-weight: bold;
+            font-size: 120%;
+        }</style>
+
+{% endblock %}
+
+<div class="panel-body">
+    <table class="table table-hover table-striped table-responsive table-bordered">
+
+        <thead class="thead-default">
+        <tr class="bg-primary">
+            <th>Round</th>
+
+            <th>Payoff</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for p in player.in_all_rounds %}
+            {% if   p.group.no_dropouts %}
+                <tr>
+                    <td> {{ p.round_number }}</td>
+                    <td>{{ p.payoff }}</td>
+                </tr>
+            {% endif %}
+        {% endfor %}
+
+        <tr class="danger">
+            <td>Your final payoff in all rounds:</td>
+
+            <td>{{ player.participant.payoff }}</td>
+
+        </tr>
+
+        <tr class="danger">
+            <td>In US Dollars the bonus is:</td>
+
+            <td>{{ participant_real_currency_payoff }}</td>
+
+        </tr>
+        <tr class="danger">
+            <td>Your participation fee is:</td>
+
+            <td>{{session.config.participation_fee}}</td>
+
+        </tr>
+        <tr class="danger">
+            <td>Your final earnings in US Dollars:</td>
+
+            <td>{{ participant.payoff_plus_participation_fee}}</td>
+
+        </tr>
+        </tbody>
+    </table>
+</div>

@@ -1,0 +1,18 @@
+{% extends "global/Page.html" %}
+{% load staticfiles otree_tags %}
+
+{% block title %}
+    {% if subsession.punishment %}Stage 1: {% endif %}Contribution (Period {{ subsession.round_number }} of
+    {{ Constants.num_rounds }})
+{% endblock %}
+
+{% block content %}
+
+    {% formfield player.contribution with label="How much will you contribute to the project (from 0 to 100)?" %}
+
+    {% next_button %}
+
+    {% include Constants.instructions_template %}
+    {% include 'pggfg/slider.html' %}
+    {{ block.super }}
+{% endblock %}

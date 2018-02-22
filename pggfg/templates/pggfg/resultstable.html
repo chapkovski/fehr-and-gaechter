@@ -1,0 +1,96 @@
+{% load staticfiles otree_tags %}
+{% block styles %}
+
+    <style>
+        td#filka {
+            width: 20px;
+            font-weight: bold;
+            font-size: 120%;
+        }</style>
+
+{% endblock %}
+
+<div class="panel-body">
+    <table class="table table-hover table-striped table-responsive table-bordered">
+
+        <thead class="thead-default">
+
+        </thead>
+        <tbody>
+        <tr class="success">
+            <td>Your endowment:</td>
+            <td id="filka"></td>
+            <td><strong>{{ Constants.endowment }}</strong></td>
+
+        </tr>
+
+        <tr class="warning">
+            <td>You contributed:</td>
+            <td id="filka"> -</td>
+            <td><strong>{{ player.contribution }}</strong></td>
+
+        </tr>
+        <tr class="">
+            <td>Other participants contributed:</td>
+            <td id="filka"></td>
+            <td>{{ player.profit1 }}</td>
+            {% for p in player.get_others_in_group %}
+                <tr>
+                    <td><i>Participant {{ forloop.counter }}:</i></td>
+                    <td id="filka"></td>
+                    <td>{{ p.contribution }}</td>
+                </tr>
+            {% endfor %}
+        <tr>
+            <td>Total contribution:</td>
+            <td id="filka"></td>
+            <td>{{ group.total_contribution }}</td>
+        </tr>
+
+
+        <tr>
+            <td>Total earnings from the project:</td>
+            <td id="filka"></td>
+            <td>{{ total_earnings }}</td>
+        </tr>
+        <tr class="success">
+            <td>Your earnings from the project:</td>
+            <td id="filka"> +</td>
+            <td><b>{{ group.individual_share }}</b></td>
+        </tr>
+
+
+
+            <tr class="warning">
+                <td>Punishment you sent:</td>
+                <td id="filka"> -</td>
+                <td><b>{{ player.punishment_sent }}</b></td>
+            </tr>
+            <tr class="warning">
+                <td>Punishment you received:</td>
+                <td id="filka"> -</td>
+                <td><b>{{ player.punishment_received }}</b></td>
+            </tr>
+
+        <tr class="danger">
+            <td>Your payoff in this round:</td>
+            <td id="filka"> =</td>
+            <td><b>{{ player.payoff }}</b></td>
+        </tr>
+        <tr>
+            <td colspan="2">In US Dollars:</td>
+            <td>{{ real_currency_payoff }}</td>
+        </tr>
+        <tr>
+            <td colspan="2">Your bonus in all rounds so far:</td>
+            <td>{{ participant_real_currency_payoff }}</td>
+        </tr>
+        <tr class="danger">
+            <td>Your total payoff so far including participation fee:</td>
+            <td id="filka"> =</td>
+            <td><b>{{ participant.payoff_plus_participation_fee}}</b></td>
+        </tr>
+
+        </tbody>
+    </table>
+</div>
