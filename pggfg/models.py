@@ -3,10 +3,11 @@ from otree.api import (
     Currency as c, currency_range
 )
 import random
-from django.core.validators import MaxValueValidator, MinValueValidator
 from django import forms
 from django.forms.widgets import NumberInput
 from django.db import models as djmodels
+
+author = "Philip Chapkovski, chapkovski@gmail.com"
 
 doc = """
 Public Good Game with Punishment (Fehr and Gaechter).
@@ -62,9 +63,14 @@ class Player(BasePlayer):
     punishment_sent = models.IntegerField()
     punishment_received = models.IntegerField()
     pd_payoff = models.CurrencyField(doc='to store payoff from contribution stage')
+    punishment_endowment = models.IntegerField(initial=0, doc='punishment endowment')
 
     def set_payoff(self):
-        self.payoff = self.pd_payoff + Constants.punishment_endowment - self.punishment_sent - self.punishment_received
+        self.payoff = self.pd_payoff - self.punishment_sent - self.punishment_received
+
+    def set_punishment_endowment(self):
+        assert self.pd_payoff is not None, 'You have to set pd_payoff before setting punishment endowment'
+        self.punishment_endowment = self.pd_payoff
 
     def set_punishment(self):
         self.punishment_sent = sum([i.amount for i in self.punishments_sent.all()])
@@ -75,7 +81,4 @@ class Player(BasePlayer):
 class Punishment(djmodels.Model):
     sender = djmodels.ForeignKey(to=Player, related_name='punishments_sent')
     receiver = djmodels.ForeignKey(to=Player, related_name='punishments_received')
-    amount = models.IntegerField(validators=[MaxValueValidator(Constants.punishment_endowment),
-                                             MinValueValidator(0)],
-                                 null=True,
-                                 )
+    amount = models.IntegerField(null=True, )

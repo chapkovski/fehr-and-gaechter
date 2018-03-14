@@ -1,6 +1,7 @@
 from django import forms
 from .models import Player, Punishment, Constants
 from django.forms import BaseInlineFormSet, ValidationError, inlineformset_factory
+from django.core.validators import MaxValueValidator, MinValueValidator
 
 
 class PunishmentForm(forms.ModelForm):
@@ -10,9 +11,12 @@ class PunishmentForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.fields['amount'].required = True
-        self.fields['amount'].widget.attrs['min'] = 0
-        self.fields['amount'].widget.attrs['max'] = Constants.punishment_endowment
+        punishment_endowment = kwargs['instance'].sender.punishment_endowment
+        amount = self.fields['amount']
+        amount.required = True
+        amount.widget.attrs['min'] = 0
+        amount.widget.attrs['max'] = punishment_endowment
+        amount.validators = [MinValueValidator(0), MaxValueValidator(punishment_endowment)]
 
 
 class PunishmentFormset(BaseInlineFormSet):
@@ -21,13 +25,14 @@ class PunishmentFormset(BaseInlineFormSet):
         if any(self.errors):
             return
         amounts = []
+        punishment_endowment = self.instance.punishment_endowment
         for form in self.forms:
             # your custom formset validation
             amounts.append(form.cleaned_data['amount'])
-        if sum(amounts) > Constants.punishment_endowment:
+        if sum(amounts) > punishment_endowment:
             raise ValidationError(
                 "In total you can't send more than {endowment} points!".format(
-                    endowment=Constants.punishment_endowment))
+                    endowment=punishment_endowment))
 
 
 PFormset = inlineformset_factory(Player, Punishment,

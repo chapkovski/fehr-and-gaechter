@@ -23,7 +23,8 @@ class Contribute(Page):
 class AfterContribWP(WaitPage):
     def after_all_players_arrive(self):
         self.group.set_pd_payoffs()
-
+        for p in self.group.get_players():
+            p.set_punishment_endowment()
 
 class Punishment(Page):
     def vars_for_template(self):

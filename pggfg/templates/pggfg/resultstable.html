@@ -17,14 +17,14 @@
 
         </thead>
         <tbody>
-        <tr class="success">
+        <tr>
             <td>Your endowment:</td>
             <td id="filka"></td>
             <td><strong>{{ Constants.endowment }}</strong></td>
 
         </tr>
 
-        <tr class="warning">
+        <tr>
             <td>You contributed:</td>
             <td> -</td>
             <td><strong>{{ player.contribution }}</strong></td>
@@ -32,35 +32,35 @@
         </tr>
 
 
-        <tr class="success">
+        <tr>
             <td>Your earnings from the project:</td>
             <td> +</td>
             <td><b>{{ group.individual_share }}</b></td>
         </tr>
 
         <tr>
-            <td>Punishment endowment:</td>
-            <td> +</td>
-            <td><b>{{ Constants.punishment_endowment }}</b></td>
-        </tr>
-
-        <tr class="warning">
             <td>Punishment you sent:</td>
             <td> -</td>
             <td><b>{{ player.punishment_sent }}</b></td>
         </tr>
-        <tr class="warning">
+        <tr>
             <td>Punishment you received:</td>
             <td> -</td>
             <td><b>{{ player.punishment_received }}</b></td>
         </tr>
 
-        <tr class="danger">
+        <tr>
             <td>Your payoff in this round:</td>
             <td> =</td>
             <td><b>{{ player.payoff }}</b></td>
         </tr>
-
+        <thead class="thead-dark">
+            <tr>
+                <th>Your cumulated payoff so far:</th>
+                <th> =</th>
+                <th><b>{{ participant.payoff }}</b></th>
+            </tr>
+        </thead>
 
         </tbody>
     </table>
