@@ -104,12 +104,6 @@ SESSION_CONFIGS = [
         'num_demo_participants': 3,
         'app_sequence': ['pggfg'],
     },
-    {
-        'name': 'testapp',
-        'display_name': 'Test App',
-        'num_demo_participants': 1,
-        'app_sequence': ['testapp'],
-    }
 ]
 
 otree.settings.augment_settings(globals())
