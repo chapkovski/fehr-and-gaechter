@@ -18,7 +18,7 @@
             decrease the
             income of these
             participants. By transferring 1 point from your endowment you decrease the income of another
-            participant by {{ Constants.punishment_factor }}  points.
+            participant by {{ Constants.punishment_factor }} points.
 
         </div>
     </div>
@@ -40,6 +40,7 @@
             <th>Player:</th>
             <th>Contibution</th>
             <th>Deduction tokens</th>
+            <th>Effect on their payoff:</th>
         </tr>
         </thead>
 
@@ -51,8 +52,9 @@
                 {% for hidden in form.hidden_fields %}
                     {{ hidden }}
                 {% endfor %}
+                <td id="{{ form.amount.id_for_label }}"></td>
             </tr>
-            <td>{{form.amount.id_for_label}}</td>
+
         {% endfor %}
     </table>
 
@@ -68,26 +70,11 @@
     </style>
 {% endblock %}
 
-
-
-
-       {% for i,j in data %}
-            <tr>
-                <td>Player {{ forloop.counter }}</td>
-                <td>{{ i.contribution }}</td>
-                <td>{% formfield j label='' %}</td>
-                <td id="{{ j.id_for_label }}"></td>
-            </tr>
-        {% endfor %}
-    </table>
-
-
-
 {% block scripts %}
     <script>
         $(function () {
             var pun_factor = {{ Constants.punishment_factor|json }};
-            $('div.input-group input').on('input', function () {
+            $('div.field-amount input').on('input', function () {
                 var curvalue = $(this).val();
                 var punishment_sent = -curvalue * pun_factor;
                 $('td#' + $(this).attr('id')).html(punishment_sent);
