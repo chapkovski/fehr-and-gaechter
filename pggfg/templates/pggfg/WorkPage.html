@@ -18,7 +18,6 @@
         Your task is to add up these two
         numbers</b>. <br>
         Submit your answer in the box below.
-{#        TODO: delete the following sentence after debug #}
         The correct answer is <span id="correct_answer"></span>!
     </p>
 
@@ -29,10 +28,8 @@
     <button class="answer btn btn-outline-dark" type="button" data-feedback="false">Answer</button>
     <p> Tasks attempted so far: <span id="tasks_attempted">{{ player.finished_tasks.count }}</span></p>
     <p> Tasks correct so far: <span id="tasks_correct"> {{ player.num_tasks_correct }}</span></p>
-{#    TODO: delete next button and the following comment #}
     {%  next_button %}
-<h4 class="red">Ray: the 'NEXT' button will be missing in the real game - that's just for debugging (so you can click
-next without waiting till it goes to the next page by itself... (Ph)</h4>
+
 {% endblock %}
 
 {% block scripts %}

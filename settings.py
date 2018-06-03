@@ -107,14 +107,8 @@ SESSION_CONFIGS = [
         'app_sequence': ['pggfg'],
     },
     {
-        'name': 'testapp',
-        'display_name': 'Test App',
-        'num_demo_participants': 1,
-        'app_sequence': ['testapp'],
-    },
-    {
-        'name': 'testingret',
-        'display_name': 'Test RET App',
+        'name': 'pggret',
+        'display_name': 'Real Effort Task + PGG with punishment',
         'num_demo_participants': 3,
         'app_sequence': ['pggfg'],
         'ret':True,

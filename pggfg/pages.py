@@ -16,6 +16,9 @@ class WorkPage(Page):
     timer_text = 'Time left to complete this round:'
     timeout_seconds = Constants.task_time
 
+    def is_displayed(self):
+        return self.session.config.get('ret')
+
     def before_next_page(self):
         self.player.set_endowment()
         self.player.dump_tasks()

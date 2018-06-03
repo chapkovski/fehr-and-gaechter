@@ -7,6 +7,11 @@
 {% endblock %}
 
 {% block content %}
+
+    <div class="alert alert-warning" role="alert">
+        Your earnings after Contribution Stage are: {{ player.pd_payoff }}
+    </div>
+
     <div class="card">
         <div class="card-header">
             <b> Instructions for stage 2</b>
@@ -14,11 +19,12 @@
         <div class="card-body">
 
             In this stage you can see the decisions and other participants in the your group,
-            You can transfer up to <strong>{{ player.punishment_endowment }} points </strong> from your endowment to
+            You can transfer up to <strong>{{ player.punishment_endowment }} </strong> from your earnings from group
+            project to
             decrease the
             income of these
             participants. By transferring 1 point from your endowment you decrease the income of another
-            participant by {{ Constants.punishment_factor }}  points.
+            participant by {{ Constants.punishment_factor }} points.
 
         </div>
     </div>
@@ -47,7 +53,7 @@
         {% for form in formset.forms %}
             <tr>
                 <td>Player {{ forloop.counter }}</td>
-                <td>{{ form.instance.receiver.endowment}}</td>
+                <td>{{ form.instance.receiver.endowment }}</td>
                 <td>{{ form.instance.receiver.contribution }}</td>
                 <td>{% formfield form.amount label='' %}</td>
                 {% for hidden in form.hidden_fields %}

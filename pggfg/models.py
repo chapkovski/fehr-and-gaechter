@@ -31,7 +31,7 @@ class Constants(BaseConstants):
     punishment_endowment = 10
     punishment_factor = 3
     ########## RET #########
-    fee = 10
+    fee = c(10)
     task_time = 60
     lb = 30
     ub = 99
@@ -43,10 +43,9 @@ class Constants(BaseConstants):
 class Subsession(BaseSubsession):
     def creating_session(self):
         for p in self.get_players():
-            if self.session.config.get('ret'):
-                for o in p.get_others_in_group():
-                    Punishment.objects.create(sender=p, receiver=o, )
-            else:
+            for o in p.get_others_in_group():
+                Punishment.objects.create(sender=p, receiver=o, )
+            if not self.session.config.get('ret'):
                 p.endowment = Constants.endowment
 
 
@@ -74,14 +73,14 @@ class Player(BasePlayer):
     endowment = models.CurrencyField(doc='ret earnings stored here')
     tasks_dump = models.LongStringField(doc='to store all tasks with answers')
 
-    contribution = models.PositiveIntegerField(
+    contribution = models.CurrencyField(
         min=0,
         doc="""The amount contributed by the player""",
     )
-    punishment_sent = models.IntegerField()
-    punishment_received = models.IntegerField()
+    punishment_sent = models.CurrencyField()
+    punishment_received = models.CurrencyField()
     pd_payoff = models.CurrencyField(doc='to store payoff from contribution stage')
-    punishment_endowment = models.IntegerField(initial=0, doc='punishment endowment')
+    punishment_endowment = models.CurrencyField(initial=0, doc='punishment endowment')
 
     def set_payoff(self):
         self.payoff = self.pd_payoff - self.punishment_sent - self.punishment_received

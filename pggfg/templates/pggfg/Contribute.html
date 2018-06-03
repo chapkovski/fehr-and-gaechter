@@ -2,12 +2,16 @@
 {% load staticfiles otree_tags %}
 
 {% block title %}
-    Stage 1: Contribution (Period {{ player.round_number }} of
+    Contribution Stage: (Period {{ player.round_number }} of
     {{ Constants.num_rounds }})
 {% endblock %}
 
 {% block content %}
-
+    {% if session.config.ret|default:None %}
+    <div class="alert alert-warning" role="alert">
+        Your earnings after Computing Task are: {{ player.endowment }}
+    </div>
+    {% endif %}
     {% formfield player.contribution label = label %}
 
     {% next_button %}
