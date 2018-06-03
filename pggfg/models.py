@@ -3,9 +3,6 @@ from otree.api import (
     Currency as c, currency_range
 )
 import random
-from django import forms
-from django.forms.widgets import NumberInput
-from django.db import models as djmodels
 
 author = "Philip Chapkovski, chapkovski@gmail.com"
 
@@ -29,10 +26,7 @@ class Constants(BaseConstants):
 
 
 class Subsession(BaseSubsession):
-    def creating_session(self):
-        for p in self.get_players():
-            for o in p.get_others_in_group():
-                Punishment.objects.create(sender=p, receiver=o, )
+   ...
 
 
 class Group(BaseGroup):
@@ -65,6 +59,7 @@ class Player(BasePlayer):
     punishment_received = models.IntegerField()
     pd_payoff = models.CurrencyField(doc='to store payoff from contribution stage')
     punishment_endowment = models.IntegerField(initial=0, doc='punishment endowment')
+    pun1, pun2, pun3, pun4, pun5, pun6 = [models.CurrencyField() for i in range(6)]
 
     def set_payoff(self):
         self.payoff = self.pd_payoff - self.punishment_sent - self.punishment_received
@@ -74,12 +69,7 @@ class Player(BasePlayer):
         self.punishment_endowment = min(self.pd_payoff, Constants.punishment_endowment)
 
     def set_punishment(self):
-        self.punishment_sent = sum([i.amount for i in self.punishments_sent.all()])
-        self.punishment_received = sum(
-            [i.amount for i in self.punishments_received.all()]) * Constants.punishment_factor
-
-
-class Punishment(djmodels.Model):
-    sender = djmodels.ForeignKey(to=Player, related_name='punishments_sent')
-    receiver = djmodels.ForeignKey(to=Player, related_name='punishments_received')
-    amount = models.IntegerField(null=True, )
+        puns_sent = [getattr(self,'pun{}'.format(p.id_in_group)) for p in self.get_others_in_group()]
+        self.punishment_sent = sum(puns_sent)
+        puns_received = [getattr(p, 'pun{}'.format(self.id_in_group)) for p in self.get_others_in_group()]
+        self.punishment_received = sum(puns_received) * Constants.punishment_factor

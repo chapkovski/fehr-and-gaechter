@@ -1,8 +1,7 @@
 from . import models
 from ._builtin import Page, WaitPage
 from otree.api import Currency as c, currency_range
-from .forms import PFormset
-from .models import Constants, Player, Punishment as PunishmentModel
+from .models import Constants, Player
 
 
 class Intro(Page):
@@ -25,19 +24,21 @@ class AfterContribWP(WaitPage):
 
 
 class Punishment(Page):
-    def vars_for_template(self):
-        return {'formset': PFormset(instance=self.player)}
+    form_model = 'player'
 
-    def post(self):
-        context = super().get_context_data()
-        formset = PFormset(self.request.POST, instance=self.player)
-        context['formset'] = formset
-        context['form'] = self.get_form()
-        if formset.is_valid():
-            allpuns = formset.save(commit=True)
-        else:
-            return self.render_to_response(context)
-        return super().post()
+    def get_form_fields(self):
+        return ['pun{}'.format(p.id_in_group) for p in self.player.get_others_in_group()]
+
+    def vars_for_template(self):
+        others = self.player.get_others_in_group()
+        form = self.get_form()
+        data = zip(others, form)
+        return {'data': data}
+
+    def error_message(self, values):
+        tot_pun = sum([int(i) for i in values.values()])
+        if tot_pun > self.player.punishment_endowment:
+            return 'You can\'t send more than {} in total'.format(self.player.punishment_endowment)
 
 
 class AfterPunishmentWP(WaitPage):

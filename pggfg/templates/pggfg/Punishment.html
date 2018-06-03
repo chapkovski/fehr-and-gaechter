@@ -2,7 +2,7 @@
 {% load staticfiles otree_tags %}
 
 {% block title %}
-    Punishment stage (Period {{ subsession.round_number }} of
+    Deduction stage (Period {{ subsession.round_number }} of
     {{ Constants.num_rounds }})
 {% endblock %}
 
@@ -18,39 +18,31 @@
             decrease the
             income of these
             participants. By transferring 1 point from your endowment you decrease the income of another
-            participant by {{ Constants.punishment_factor }}  points.
+            participant by {{ Constants.punishment_factor }} points.
 
         </div>
     </div>
 
 
 
-    {% if formset.non_form_errors %}
-        {% for error in formset.non_form_errors %}
-            <div class="alert alert-danger">
-                {{ error }}
-            </div>
-        {% endfor %}
-    {% endif %}
 
-    <table class="table table-hover table-striped table-responsive">
-        {{ formset.management_form }}
+
+    <table class="table table-hover table-striped">
         <thead>
         <tr>
             <th>Player:</th>
             <th>Contibution</th>
-            <th>Punishment tokens</th>
+            <th>Deduction tokens</th>
+            <th>Effect on their payoff:</th>
         </tr>
         </thead>
 
-        {% for form in formset.forms %}
+        {% for i,j in data %}
             <tr>
                 <td>Player {{ forloop.counter }}</td>
-                <td>{{ form.instance.receiver.contribution }}</td>
-                <td>{% formfield form.amount label='' %}</td>
-                {% for hidden in form.hidden_fields %}
-                    {{ hidden }}
-                {% endfor %}
+                <td>{{ i.contribution }}</td>
+                <td>{% formfield j label='' %}</td>
+                <td id="{{ j.id_for_label }}"></td>
             </tr>
         {% endfor %}
     </table>
@@ -65,4 +57,17 @@
             display: table !important
         }
     </style>
+{% endblock %}
+
+{% block scripts %}
+    <script>
+        $(function () {
+            var pun_factor = {{ Constants.punishment_factor|json }};
+            $('div.input-group input').on('input', function () {
+                var curvalue = $(this).val();
+                var punishment_sent = -curvalue * pun_factor;
+                $('td#' + $(this).attr('id')).html(punishment_sent);
+            })
+        });
+    </script>
 {% endblock %}
