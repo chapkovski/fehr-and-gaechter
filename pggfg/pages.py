@@ -12,9 +12,25 @@ class Intro(Page):
         return self.subsession.round_number == 1
 
 
+class WorkPage(Page):
+    timer_text = 'Time left to complete this round:'
+    timeout_seconds = Constants.task_time
+
+    def before_next_page(self):
+        self.player.set_endowment()
+        self.player.dump_tasks()
+
+
 class Contribute(Page):
     form_model = 'player'
     form_fields = ['contribution']
+
+    def vars_for_template(self):
+        e = self.player.endowment
+        return {'label': "How much will you contribute to the project (from 0 to {})?".format(e)}
+
+    def contribution_max(self):
+        return self.player.endowment
 
 
 class AfterContribWP(WaitPage):
@@ -54,6 +70,7 @@ class Results(Page):
 # from customwp.views import StartWP
 page_sequence = [
     Intro,
+    WorkPage,
     Contribute,
     AfterContribWP,
     Punishment,

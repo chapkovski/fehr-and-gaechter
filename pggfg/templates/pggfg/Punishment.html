@@ -38,6 +38,7 @@
         <thead>
         <tr>
             <th>Player:</th>
+            <th>Endowment:</th>
             <th>Contibution</th>
             <th>Punishment tokens</th>
         </tr>
@@ -46,6 +47,7 @@
         {% for form in formset.forms %}
             <tr>
                 <td>Player {{ forloop.counter }}</td>
+                <td>{{ form.instance.receiver.endowment}}</td>
                 <td>{{ form.instance.receiver.contribution }}</td>
                 <td>{% formfield form.amount label='' %}</td>
                 {% for hidden in form.hidden_fields %}

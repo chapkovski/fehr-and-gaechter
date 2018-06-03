@@ -63,7 +63,9 @@ USE_POINTS = True
 LANGUAGE_CODE = 'en'
 
 # if an app is included in SESSION_CONFIGS, you don't need to list it here
-INSTALLED_APPS = ['otree']
+INSTALLED_APPS = ['otree',
+                  'django.contrib.humanize',
+                  ]
 
 # SENTRY_DSN = ''
 
@@ -109,6 +111,13 @@ SESSION_CONFIGS = [
         'display_name': 'Test App',
         'num_demo_participants': 1,
         'app_sequence': ['testapp'],
+    },
+    {
+        'name': 'testingret',
+        'display_name': 'Test RET App',
+        'num_demo_participants': 3,
+        'app_sequence': ['pggfg'],
+        'ret':True,
     }
 ]
 

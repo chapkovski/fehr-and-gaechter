@@ -1,0 +1,68 @@
+{% extends "global/Page.html" %}
+{% load staticfiles otree_tags %}
+
+{% block title %}
+    Counting task - round {{ view.round_number }}
+{% endblock %}
+
+{% block content %}
+<div class="bd-example-border-utils">
+
+<div class="bd-example">
+<div class="border border-primary rounded left align-middle pagination-centered "></div>
+<div class="border border-secondary rounded right align-middle pagination-centered"></div>
+</div>
+
+</div>
+    <p>
+        Your task is to add up these two
+        numbers</b>. <br>
+        Submit your answer in the box below.
+{#        TODO: delete the following sentence after debug #}
+        The correct answer is <span id="correct_answer"></span>!
+    </p>
+
+
+
+    <div>Your answer is:</div>
+    <input type="number" id="answer" class="offer" style="background-color: white" >
+    <button class="answer btn btn-outline-dark" type="button" data-feedback="false">Answer</button>
+    <p> Tasks attempted so far: <span id="tasks_attempted">{{ player.finished_tasks.count }}</span></p>
+    <p> Tasks correct so far: <span id="tasks_correct"> {{ player.num_tasks_correct }}</span></p>
+{#    TODO: delete next button and the following comment #}
+    {%  next_button %}
+<h4 class="red">Ray: the 'NEXT' button will be missing in the real game - that's just for debugging (so you can click
+next without waiting till it goes to the next page by itself... (Ph)</h4>
+{% endblock %}
+
+{% block scripts %}
+    <script>
+        $(function () {
+            $(window).keydown(function (event) {
+                if (event.keyCode == 13) {
+                    event.preventDefault();
+                    return false;
+                }
+            });
+        });
+    </script>
+    {% include 'includes/js_work_page.html' %}
+{% endblock %}
+{% block styles %}
+    <style type="text/css">
+    .red{
+        color:red;
+    }
+    .bd-example-border-utils [class^=border] {
+    display: inline-block;
+    width: 5rem;
+    height: 5rem;
+    margin: .25rem;
+    background-color: #f5f5f5;
+        text-align: center;
+        padding-top:20px;
+        padding-bottom:20px;
+        font-size:150%;
+}
+    </style>
+{% endblock %}

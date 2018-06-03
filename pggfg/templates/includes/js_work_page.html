@@ -1,0 +1,57 @@
+{% load staticfiles otree_tags %}
+
+<script>
+    $(function () {
+
+        var ws_scheme = window.location.protocol == "https:" ? "wss" : "ws";
+        var ws_path = ws_scheme + '://' + window.location.host + "/tasktracker/participant/{{ participant.code }}/player/{{ player.pk}}";
+        var socket = new ReconnectingWebSocket(ws_path);
+        var difficulty;
+        // Handle any errors that occur.
+        socket.onerror = function (error) {
+            console.log('WebSocket Error: ' + error);
+        };
+        // Show a connected message when the WebSocket is opened.
+        socket.onopen = function (event) {
+            console.log('connected to oTree');
+        };
+        // Handle messages sent by the server.
+        socket.onmessage = function (event) {
+            var obj = jQuery.parseJSON(event.data);
+
+            $('span#tasks_attempted').html(obj.tasks_attempted);
+            $('span#tasks_correct').html(obj.tasks_correct);
+
+{#            TODO: delete correct answer after debugging #}
+            $('span#correct_answer').html(obj.correct_answer);
+            $('div.left').html(obj.left);
+            $('div.right').html(obj.right);
+
+
+        }
+        ;
+        socket.onclose = function (event) {
+            console.log('disconnected from oTree');
+        };
+        $("button.answer").on("click", function () {
+            var msg = {
+                'answer': $('input#answer').val(),
+            };
+            if (socket.readyState === WebSocket.OPEN) {
+                socket.send(JSON.stringify(msg));
+            }
+            ;
+            $("input#answer").val('');
+        });
+
+        $("input#answer").keyup(function (event) {
+            if (event.keyCode == 13) {
+                event.preventDefault();
+                $("button.answer").click();
+            }
+        });
+
+
+    });
+</script>
+
