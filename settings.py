@@ -5,6 +5,7 @@ import dj_database_url
 
 import otree.settings
 
+EXTENSION_APPS = ['pggfg']
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 
@@ -53,11 +54,9 @@ AUTH_LEVEL = environ.get('OTREE_AUTH_LEVEL')
 AWS_ACCESS_KEY_ID = environ.get('AWS_ACCESS_KEY_ID')
 AWS_SECRET_ACCESS_KEY = environ.get('AWS_SECRET_ACCESS_KEY')
 
-
 # e.g. EUR, CAD, GBP, CHF, CNY, JPY
 REAL_WORLD_CURRENCY_CODE = 'USD'
 USE_POINTS = True
-
 
 # e.g. en, de, fr, it, ja, zh-hans
 # see: https://docs.djangoproject.com/en/1.9/topics/i18n/#term-language-code
@@ -79,7 +78,7 @@ mturk_hit_settings = {
     'frame_height': 500,
     'preview_template': 'global/MTurkPreview.html',
     'minutes_allotted_per_assignment': 60,
-    'expiration_hours': 7*24,  # 7 days
+    'expiration_hours': 7 * 24,  # 7 days
     # 'grant_qualification_id': 'YOUR_QUALIFICATION_ID_HERE',# to prevent retakes
     # to use qualification requirements, you need to uncomment the 'qualification' import
     # at the top of this file.
@@ -98,15 +97,19 @@ SESSION_CONFIG_DEFAULTS = {
     'mturk_hit_settings': mturk_hit_settings,
 }
 
-
 SESSION_CONFIGS = [
     {
         'name': 'pggfg',
         'display_name': 'Public Good Game with Punishment (Fehr and Gaechter)',
         'num_demo_participants': 3,
         'app_sequence': ['pggfg'],
+    },
+    {
+        'name': 'testapp',
+        'display_name': 'Test App',
+        'num_demo_participants': 1,
+        'app_sequence': ['testapp'],
     }
 ]
-
 
 otree.settings.augment_settings(globals())

@@ -1,0 +1,39 @@
+{% extends "otree/BaseAdmin.html" %}
+
+{% block title %}
+    Punishment info for the session
+{% endblock %}
+
+{% block content %}
+
+    {% if punishments %}
+
+        <table class="table table-hover table-striped table-bordered">
+            <thead>
+            <th>Session code</th>
+            <th>Round</th>
+            <th>Sender id</th>
+            <th>Sender contribution</th>
+            <th>Receiver id</th>
+            <th>Receiver contribution</th>
+            <th>Punishment sent</th>
+            </thead>
+            <tbody>
+            {% for p in punishments %}
+                <tr>
+                    <td>{{ p.sender.session.code }}</td>
+                    <td>{{ p.sender.round_number }}</td>
+                    <td>{{ p.sender.id_in_group }}</td>
+                    <td>{{ p.sender.contribution|default_if_none:'' }}</td>
+                    <td>{{ p.receiver.id_in_group }}</td>
+                    <td>{{ p.receiver.contribution|default_if_none:'' }}</td>
+                    <td>{{ p.amount|default_if_none:'' }}</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        No punishment info
+    {% endif %}
+{% endblock %}
+

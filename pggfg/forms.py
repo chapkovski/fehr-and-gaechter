@@ -4,20 +4,6 @@ from django.forms import BaseInlineFormSet, ValidationError, inlineformset_facto
 from django.core.validators import MaxValueValidator, MinValueValidator
 
 
-class PunishmentForm(forms.ModelForm):
-    class Meta:
-        model = Punishment
-        fields = ['amount']
-
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        punishment_endowment = kwargs['instance'].sender.punishment_endowment
-        amount = self.fields['amount']
-        amount.required = True
-        amount.widget.attrs['min'] = 0
-        amount.widget.attrs['max'] = punishment_endowment
-        amount.validators = [MinValueValidator(0), MaxValueValidator(punishment_endowment)]
-
 
 class PunishmentFormset(BaseInlineFormSet):
     def clean(self):
@@ -27,7 +13,6 @@ class PunishmentFormset(BaseInlineFormSet):
         amounts = []
         punishment_endowment = self.instance.punishment_endowment
         for form in self.forms:
-            # your custom formset validation
             amounts.append(form.cleaned_data['amount'])
         if sum(amounts) > punishment_endowment:
             raise ValidationError(
@@ -37,7 +22,6 @@ class PunishmentFormset(BaseInlineFormSet):
 
 PFormset = inlineformset_factory(Player, Punishment,
                                  formset=PunishmentFormset,
-                                 form=PunishmentForm,
                                  extra=0,
                                  can_delete=False,
                                  fk_name='sender',

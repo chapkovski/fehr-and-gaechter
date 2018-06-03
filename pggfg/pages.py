@@ -12,9 +12,6 @@ class Intro(Page):
         return self.subsession.round_number == 1
 
 
-
-
-
 class Contribute(Page):
     form_model = 'player'
     form_fields = ['contribution']
@@ -26,22 +23,20 @@ class AfterContribWP(WaitPage):
         for p in self.group.get_players():
             p.set_punishment_endowment()
 
+
 class Punishment(Page):
     def vars_for_template(self):
-
         return {'formset': PFormset(instance=self.player)}
 
     def post(self):
         context = super().get_context_data()
         formset = PFormset(self.request.POST, instance=self.player)
-
         context['formset'] = formset
+        context['form'] = self.get_form()
         if formset.is_valid():
             allpuns = formset.save(commit=True)
-
         else:
             return self.render_to_response(context)
-
         return super().post()
 
 

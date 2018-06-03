@@ -1,0 +1,4 @@
+"Session code","Round","Sender id","Sender contribution","Receiver id","Receiver contribution","Punishment sent"
+{% for p in punishments %}
+    {{ p.sender.session.code }},    {{ p.sender.round_number }},    {{ p.sender.id_in_group }},    {{ p.sender.contribution|default_if_none:'' }},    {{ p.receiver.id_in_group }},    {{ p.receiver.contribution|default_if_none:'' }},    {{ p.amount|default_if_none:'' }}
+{% endfor %}

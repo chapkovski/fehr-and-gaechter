@@ -22,9 +22,9 @@ class Constants(BaseConstants):
     num_others_per_group = players_per_group - 1
     num_rounds = 20
     instructions_template = 'pggfg/Instructions.html'
-    endowment = 100
+    endowment = 20
     efficiency_factor = 1.6
-    punishment_endowment = 20
+    punishment_endowment = 10
     punishment_factor = 3
 
 
@@ -59,6 +59,7 @@ class Player(BasePlayer):
     contribution = models.PositiveIntegerField(
         min=0, max=Constants.endowment,
         doc="""The amount contributed by the player""",
+        label="How much will you contribute to the project (from 0 to {})?".format(Constants.endowment)
     )
     punishment_sent = models.IntegerField()
     punishment_received = models.IntegerField()
@@ -70,7 +71,7 @@ class Player(BasePlayer):
 
     def set_punishment_endowment(self):
         assert self.pd_payoff is not None, 'You have to set pd_payoff before setting punishment endowment'
-        self.punishment_endowment = self.pd_payoff
+        self.punishment_endowment = min(self.pd_payoff, Constants.punishment_endowment)
 
     def set_punishment(self):
         self.punishment_sent = sum([i.amount for i in self.punishments_sent.all()])
