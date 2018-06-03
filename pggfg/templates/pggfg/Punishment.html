@@ -2,7 +2,7 @@
 {% load staticfiles otree_tags %}
 
 {% block title %}
-    Punishment stage (Period {{ subsession.round_number }} of
+    Deduction stage (Period {{ subsession.round_number }} of
     {{ Constants.num_rounds }})
 {% endblock %}
 
@@ -39,7 +39,7 @@
         <tr>
             <th>Player:</th>
             <th>Contibution</th>
-            <th>Punishment tokens</th>
+            <th>Deduction tokens</th>
         </tr>
         </thead>
 
@@ -52,6 +52,7 @@
                     {{ hidden }}
                 {% endfor %}
             </tr>
+            <td>{{form.amount.id_for_label}}</td>
         {% endfor %}
     </table>
 
@@ -65,4 +66,32 @@
             display: table !important
         }
     </style>
+{% endblock %}
+
+
+
+
+       {% for i,j in data %}
+            <tr>
+                <td>Player {{ forloop.counter }}</td>
+                <td>{{ i.contribution }}</td>
+                <td>{% formfield j label='' %}</td>
+                <td id="{{ j.id_for_label }}"></td>
+            </tr>
+        {% endfor %}
+    </table>
+
+
+
+{% block scripts %}
+    <script>
+        $(function () {
+            var pun_factor = {{ Constants.punishment_factor|json }};
+            $('div.input-group input').on('input', function () {
+                var curvalue = $(this).val();
+                var punishment_sent = -curvalue * pun_factor;
+                $('td#' + $(this).attr('id')).html(punishment_sent);
+            })
+        });
+    </script>
 {% endblock %}
