@@ -74,3 +74,17 @@
         }
     </style>
 {% endblock %}
+
+
+{% block scripts %}
+    <script>
+        $(function () {
+            var pun_factor = {{ Constants.punishment_factor|json }};
+            $('div.field-amount input').on('input', function () {
+                var curvalue = $(this).val();
+                var punishment_sent = -curvalue * pun_factor;
+                $('td#' + $(this).attr('id')).html(punishment_sent);
+            })
+        });
+    </script>
+{% endblock %}
