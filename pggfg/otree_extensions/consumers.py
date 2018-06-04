@@ -54,6 +54,7 @@ class TaskTracker(WebsocketConsumer):
 
     def connect(self, message, **kwargs):
         self.clean_kwargs(kwargs)
+        player = self.get_player()
         self.send(self.get_task())
 
     def send(self, content):
