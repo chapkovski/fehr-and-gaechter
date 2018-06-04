@@ -47,6 +47,7 @@
             <th>Endowment:</th>
             <th>Contibution</th>
             <th>Punishment tokens</th>
+            <th>Effect on their payoff:</th>
         </tr>
         </thead>
 
@@ -59,6 +60,7 @@
                 {% for hidden in form.hidden_fields %}
                     {{ hidden }}
                 {% endfor %}
+                <td id="{{ form.amount.id_for_label }}"></td>
             </tr>
         {% endfor %}
     </table>
