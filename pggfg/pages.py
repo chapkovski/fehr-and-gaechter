@@ -3,6 +3,7 @@ from ._builtin import Page, WaitPage
 from otree.api import Currency as c, currency_range
 from .forms import PFormset
 from .models import Constants, Player, Punishment as PunishmentModel
+from otree.constants_internal import timeout_happened
 
 
 class Intro(Page):
@@ -25,19 +26,27 @@ class AfterContribWP(WaitPage):
 
 
 class Punishment(Page):
+    timeout_seconds = 10
+
     def vars_for_template(self):
         return {'formset': PFormset(instance=self.player)}
 
     def post(self):
         context = super().get_context_data()
-        formset = PFormset(self.request.POST, instance=self.player)
-        context['formset'] = formset
-        context['form'] = self.get_form()
-        if formset.is_valid():
-            allpuns = formset.save(commit=True)
-        else:
-            return self.render_to_response(context)
+        auto_submitted = self.request.POST.get(timeout_happened)
+        if not auto_submitted:
+            formset = PFormset(self.request.POST, instance=self.player)
+            context['formset'] = formset
+            context['form'] = self.get_form()
+            if formset.is_valid():
+                allpuns = formset.save(commit=True)
+            else:
+                return self.render_to_response(context)
         return super().post()
+
+    def before_next_page(self):
+        if self.timeout_happened:
+            self.player.punishments_sent.all().update(amount=0)
 
 
 class AfterPunishmentWP(WaitPage):
