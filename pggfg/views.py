@@ -14,7 +14,9 @@ class AllSessionsList(TemplateView):
     display_name = 'Exporting punishment data from PGGFG'
 
     def get(self, request, *args, **kwargs):
-        all_sessions = Session.objects.all()
+        candidates_list = Punishment.objects.filter(amount__isnull=False).values_list('sender__session', flat=True)
+
+        all_sessions = Session.objects.filter(id__in=candidates_list)
         pggfg_sessions = [i for i in all_sessions if 'pggfg' in i.config['app_sequence']]
         return render(request, self.template_name, {'sessions': pggfg_sessions})
 
@@ -28,7 +30,8 @@ class ListPunishmentsView(ListView):
 
     def get_queryset(self):
         session_code = self.kwargs['pk']
-        return Punishment.objects.filter(sender__session__code=session_code)
+        return Punishment.objects.filter(sender__session__code=session_code,
+                                         amount__isnull=False)
 
 
 class PunishmentCSVExport(TemplateView):
@@ -38,14 +41,14 @@ class PunishmentCSVExport(TemplateView):
     response_class = HttpResponse
     content_type = 'text/csv'
 
-
     def get(self, request, *args, **kwargs):
         ...
         response = HttpResponse(content_type='text/csv')
         session_code = self.kwargs['pk']
         filename = '{}_punishment_data.csv'.format(session_code)
         response['Content-Disposition'] = 'attachment; filename="{}"'.format(filename)
-        punishments = Punishment.objects.filter(sender__session__code=session_code)
+        punishments = Punishment.objects.filter(sender__session__code=session_code,
+                                                amount__isnull=False)
         t = loader.get_template(self.template_name)
         c = {
             'punishments': punishments,
