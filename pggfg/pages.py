@@ -3,7 +3,7 @@ from ._builtin import Page, WaitPage
 from otree.api import Currency as c, currency_range
 from .forms import PFormset
 from .models import Constants, Player, Punishment as PunishmentModel
-from otree.constants_internal import timeout_happened
+from otree.constants import timeout_happened
 
 
 class Intro(Page):
@@ -60,7 +60,6 @@ class Results(Page):
     ...
 
 
-# from customwp.views import StartWP
 page_sequence = [
     Intro,
     Contribute,
