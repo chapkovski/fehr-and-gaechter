@@ -26,7 +26,7 @@ class AfterContribWP(WaitPage):
 
 
 class Punishment(Page):
-    timeout_seconds = 30
+    # timeout_seconds = 30
 
     def vars_for_template(self):
         return {'formset': PFormset(instance=self.player)}

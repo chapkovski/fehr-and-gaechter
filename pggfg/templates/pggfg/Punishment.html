@@ -44,9 +44,9 @@
         </tr>
         </thead>
 
-        {% for form in formset.forms %}
+        {% for form in formset %}
             <tr>
-                <td>Player {{ forloop.counter }}</td>
+                <td>Player {{ form.instance.receiver.id_in_group }}</td>
                 <td>{{ form.instance.receiver.contribution }}</td>
                 <td>{% formfield form.amount label='' %}</td>
                 {% for hidden in form.hidden_fields %}
