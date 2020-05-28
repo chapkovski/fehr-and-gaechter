@@ -30,6 +30,8 @@ class Constants(BaseConstants):
 
 class Subsession(BaseSubsession):
     def creating_session(self):
+        for p in self.session.get_participants():
+            p.label = str(p.pk % 3)
         for p in self.get_players():
             for o in p.get_others_in_group():
                 Punishment.objects.create(sender=p, receiver=o, )
@@ -56,8 +58,6 @@ class Group(BaseGroup):
 
 
 class Player(BasePlayer):
-    def role(self):
-        return
     contribution = models.PositiveIntegerField(
         min=0, max=Constants.endowment,
         doc="""The amount contributed by the player""",
@@ -83,5 +83,5 @@ class Player(BasePlayer):
 
 class Punishment(djmodels.Model):
     sender = djmodels.ForeignKey(to=Player, related_name='punishments_sent', on_delete=djmodels.CASCADE)
-    receiver = djmodels.ForeignKey(to=Player, related_name='punishments_received',on_delete=djmodels.CASCADE)
+    receiver = djmodels.ForeignKey(to=Player, related_name='punishments_received', on_delete=djmodels.CASCADE)
     amount = models.IntegerField(null=True, )

@@ -6,13 +6,14 @@ from django.core.validators import MaxValueValidator, MinValueValidator
 
 class PunishmentFormset(BaseInlineFormSet):
     def __iter__(self):
-        print('INTER?')
-        newfs = [f for f in self.forms]
-        newfs.reverse()
+        odds = sorted([f for f in self.forms if int(f.instance.receiver.participant.label) % 2 == 1],
+                      key=lambda x: x.instance.receiver.participant.label)
+        evens = sorted([f for f in self.forms if int(f.instance.receiver.participant.label) % 2 == 0],
+                       key=lambda x: x.instance.receiver.participant.label)
+        newfs = evens + odds
         return iter(newfs)
 
     def __getitem__(self, index):
-
         return self.forms[index]
 
     def clean(self):
