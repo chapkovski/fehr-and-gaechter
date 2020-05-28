@@ -56,8 +56,6 @@ class Group(BaseGroup):
 
 
 class Player(BasePlayer):
-    def role(self):
-        return
     contribution = models.PositiveIntegerField(
         min=0, max=Constants.endowment,
         doc="""The amount contributed by the player""",

@@ -4,17 +4,8 @@ from django.forms import BaseInlineFormSet, ValidationError, inlineformset_facto
 from django.core.validators import MaxValueValidator, MinValueValidator
 
 
+
 class PunishmentFormset(BaseInlineFormSet):
-    def __iter__(self):
-        print('INTER?')
-        newfs = [f for f in self.forms]
-        newfs.reverse()
-        return iter(newfs)
-
-    def __getitem__(self, index):
-
-        return self.forms[index]
-
     def clean(self):
         super().clean()
         if any(self.errors):
