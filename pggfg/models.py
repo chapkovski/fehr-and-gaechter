@@ -2,9 +2,7 @@ from otree.api import (
     models, widgets, BaseConstants, BaseSubsession, BaseGroup, BasePlayer,
     Currency as c, currency_range
 )
-import random
-from django import forms
-from django.forms.widgets import NumberInput
+
 from django.db import models as djmodels
 
 author = "Philip Chapkovski, chapkovski@gmail.com"
@@ -28,11 +26,16 @@ class Constants(BaseConstants):
     punishment_factor = 3
 
 
+from django.db.models import Q, F
+
+
 class Subsession(BaseSubsession):
     def creating_session(self):
+        ps = []
         for p in self.get_players():
             for o in p.get_others_in_group():
-                Punishment.objects.create(sender=p, receiver=o, )
+                ps.append(Punishment(sender=p, receiver=o, ))
+        Punishment.objects.bulk_create(ps)
 
 
 class Group(BaseGroup):
@@ -49,10 +52,13 @@ class Group(BaseGroup):
                                - p.contribution,
                                + self.individual_share,
                                ])
+            p.set_punishment_endowment()
 
     def set_punishments(self):
         for p in self.get_players():
             p.set_punishment()
+        for p in self.get_players():
+            p.set_payoff()
 
 
 class Player(BasePlayer):
@@ -81,5 +87,5 @@ class Player(BasePlayer):
 
 class Punishment(djmodels.Model):
     sender = djmodels.ForeignKey(to=Player, related_name='punishments_sent', on_delete=djmodels.CASCADE)
-    receiver = djmodels.ForeignKey(to=Player, related_name='punishments_received',on_delete=djmodels.CASCADE)
-    amount = models.IntegerField(null=True, )
+    receiver = djmodels.ForeignKey(to=Player, related_name='punishments_received', on_delete=djmodels.CASCADE)
+    amount = models.IntegerField(min=0)
